@@ -18,17 +18,17 @@ const Todo = () => {
     const toggleDarkMode = () => {
         setDarkMode(!darkMode);
     };
-   
-    
+    // git config --global user.name "saurabh"
+    // git config --global user.email "siddharthtripathi063@gmail.com"
+
     return (
         <div className={`max-w-md mx-auto mt-8 p-4 ${darkMode ? 'bg-gray-800 text-white' : 'bg-white'} rounded-md shadow-md transition-all duration-500`}>
             <div className="flex justify-between items-center mb-4">
                 <h1 className="text-2xl font-bold">Todo List</h1>
                 <button
                     onClick={toggleDarkMode}
-                    className={`p-2 ${darkMode ? 'text-white' : 'text-gray-800'} ${
-                        darkMode ? 'bg-gray-600' : 'bg-gray-300'
-                    } rounded-full focus:outline-none`}
+                    className={`p-2 ${darkMode ? 'text-white' : 'text-gray-800'} ${darkMode ? 'bg-gray-600' : 'bg-gray-300'
+                        } rounded-full focus:outline-none`}
                 >
                     {darkMode ? 'Light Mode' : 'Dark Mode'}
                 </button>
@@ -49,7 +49,7 @@ const Todo = () => {
             <div className="mt-4">
                 {newTodo.map((todo, index) => (
                     <div key={index} className={`flex items-center justify-between border-b py-2 ${darkMode ? 'border-gray-600' : 'border-gray-300'}`}>
-                        <span>{todo}</span>
+                        <span>{index}){todo}</span>
                         <button
                             onClick={() => handleDelete(index)}
                             className={`text-red-500 hover:text-red-700 ${darkMode ? 'text-white' : 'text-gray-800'}`}
