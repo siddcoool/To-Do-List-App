@@ -1,19 +1,66 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import { ThemeContext, useTheme } from './context/ThemeContext';
+import { useTodo } from './context/TodoContext';
+
+const TodoPaginator = ({  count = 2 }) => {
+    const { darkMode } = useTheme();
+    const { todoList, handleDelete } = useTodo()
+
+
+    const [currentPageItems, setCurrentPageItems] = useState([])
+
+    const totalPages = Math.ceil(todoList.length / count)
+
+    const giveMeNewArray = (page = 0) => {
+        const output = []
+        for (let i = page * count; i < (page * count) + count; i++) {
+            const todo = todoList[i];
+            if (!todoList[i]) break
+            output.push(todo)
+        }
+        setCurrentPageItems(output)
+    }
+
+    useEffect(() => {
+        if (todoList.length)
+            giveMeNewArray()
+    }, [todoList])
+
+
+
+    return <div className="mt-4">
+        {currentPageItems.map((todo, index) => (
+            <div key={index} className={`flex items-center justify-between border-b py-2 ${darkMode ? 'border-gray-600' : 'border-gray-300'}`}>
+                <span>{todo}</span>
+                <button
+                    onClick={() => handleDelete(index)}
+                    className={`text-red-500 hover:text-red-700 ${darkMode ? 'text-white' : 'text-gray-800'}`}
+                >
+                    Delete
+                </button>
+            </div>
+        ))}
+        {Array.from(Array(totalPages), (e, i) => {
+            return <div>
+                <button key={i} onClick={() => giveMeNewArray(i)}>{parseInt(i) + 1}</button>
+            </div>
+        })}
+    </div>
+}
 
 const Todo = () => {
+    const { darkMode, setDarkMode } = useTheme();
+
     const [todo, setTodo] = useState('');
-    const [newTodo, setNewTodo] = useState([]);
-    const [darkMode, setDarkMode] = useState(false);
+    const { todoList, setTodoList } = useTodo();
+    // const [darkMode, setDarkMode] = useState(false);
 
     const handleSubmit = () => {
-        setNewTodo([...newTodo, todo]);
+        setTodoList([...todoList, todo]);
         setTodo('');
     };
 
-    const handleDelete = (index) => {
-        const filterTodo = newTodo.filter((_, currentIndex) => currentIndex !== index);
-        setNewTodo(filterTodo);
-    };
+    
 
     const toggleDarkMode = () => {
         setDarkMode(!darkMode);
@@ -46,19 +93,7 @@ const Todo = () => {
             >
                 Add
             </button>
-            <div className="mt-4">
-                {newTodo.map((todo, index) => (
-                    <div key={index} className={`flex items-center justify-between border-b py-2 ${darkMode ? 'border-gray-600' : 'border-gray-300'}`}>
-                        <span>{index}){todo}</span>
-                        <button
-                            onClick={() => handleDelete(index)}
-                            className={`text-red-500 hover:text-red-700 ${darkMode ? 'text-white' : 'text-gray-800'}`}
-                        >
-                            Delete
-                        </button>
-                    </div>
-                ))}
-            </div>
+            <TodoPaginator />
         </div>
     );
 };
