@@ -22,7 +22,7 @@ const TodoPaginator = ({  count = 2 }) => {
     }
 
     useEffect(() => {
-        if (todoList.length)
+        // if (todoList.length)
             giveMeNewArray()
     }, [todoList])
 
@@ -59,7 +59,11 @@ const Todo = () => {
         setTodoList([...todoList, todo]);
         setTodo('');
     };
-
+    const handleKeyDown = (e) => {
+        if(e.key == "Enter"){
+            handleSubmit()
+        }
+    }
     
 
     const toggleDarkMode = () => {
@@ -83,7 +87,7 @@ const Todo = () => {
             <input
                 type="text"
                 value={todo}
-                onChange={(e) => setTodo(e.target.value)}
+                onChange={(e) => setTodo(e.target.value)} onKeyDown={handleKeyDown}
                 className={`border p-2 w-full mb-4 ${darkMode ? 'text-white bg-gray-700' : 'bg-white'}`}
                 placeholder="Add a new todo"
             />
